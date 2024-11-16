@@ -16,7 +16,7 @@ def user_credits(user_id):
 
     credits = get_credits(user_id = user_id)
     if not credits:
-        raise HTTPException(status_code=404, detail= "Credits not found")
+        raise HTTPException(status_code=404, detail= "Кредитів для цього юзера не знайдено")
     response = {}
     
     for credit in credits:
@@ -68,13 +68,13 @@ def create_upload_file(file:UploadFile):
 
     file_location = f"files/{file.filename}"
     if not file.filename.endswith((".xls", ".xlsm", ".xlsx")):
-        return {"Error":"Неправильний формат файлу", "Дозволений тип":".xlsx, .xls, .xlsm"}
+        raise HTTPException(status_code=404, detail= "Неправильний формат файлу. Дозволені типи: .xlsx, .xls, .xlsm")
     try:
         with open(file_location, "wb") as f:
             shutil.copyfileobj(file.file, f)
     except Exception as e:
         print(e)
-        return {"Error":"Помилка при завантаженні файла"}
+        raise HTTPException(status_code=404, detail= "Помилка при завантаженні файла. Спробуйте інший")
     
     return download_plans(file_location)
 
@@ -83,9 +83,12 @@ def create_upload_file(file:UploadFile):
 def plan_perfomance(date:date):
     result = plans_perfomance(date)
     if result =={}:
-        return {"ERROR":"Ми нічого не знайшли"}
+        raise HTTPException(status_code=404, detail= "Планів за цей період не знайдено")
     return result
 
 @app.post("/year_performance")
 def year_perfomance(year:int):
-    return year_perf(year)
+    result = year_perf(year)
+    if "Error" in result:
+        raise HTTPException(status_code=404, detail= result['Error'])
+    return result

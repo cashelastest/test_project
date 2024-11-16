@@ -18,7 +18,7 @@ TEST_DB_CONFIG = {
     'password': os.getenv('TEST_DB_PASSWORD'),
     'host': os.getenv('TEST_DB_HOST', 'localhost'),
     'port': os.getenv('TEST_DB_PORT', '3306'),
-    'database': os.getenv('TEST_DB_NAME', 'test')
+    'database': os.getenv('TEST_DB_NAME')
 }
 
 def get_db_url(test):

@@ -5,12 +5,12 @@ from sqlalchemy import insert
 from db_connector import test_engine,test_session
 from datetime import datetime,date
 import os
+import pytest
 
 
 client = TestClient(app)
 
 BaseModel.metadata.create_all(test_engine)
-
 
 def insert_dictionary():
     """переносить Dictionary зі csv до бд"""
@@ -81,6 +81,8 @@ def insert_plans():
 
 def test_prepare_data():
     """Переносить дані з csv файлів до бази даних"""
+
+
     insert_users()
     insert_dictionary()
     insert_credits()
@@ -93,7 +95,7 @@ def test_user_credits_not_found():
     """Тест перевіряє кредити неіснуючого користувача"""
     response = client.get("/user_credits/99999/")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Credits not found"}
+    assert response.json() == {'detail': 'Кредитів для цього юзера не знайдено'}
 
 def test_user_credits_valid():
     """перевіряє кредити існуючого користувача"""
@@ -105,7 +107,7 @@ def test_plans_insert_invalid_file():
     """перевіряє при завантаженні неправильного файла"""
     files = {"file": ("test.txt", "invalid content", "text/plain")}
     response = client.post("/plans_insert", files=files)
-    assert "Error" in response.json()
+    assert response.status_code == 404
 
 
 def test_plans_perfomance():

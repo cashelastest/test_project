@@ -89,6 +89,6 @@ def year_perf(year):
             
         except Exception as e:
             print(f"Помилка при обробці даних за місяць {month}: {str(e)}")
-            return {"ERROR": f"Виникла технічна помилка при створенні звіту за місяць {month}: {str(e)}"}
+            return {"Error": f"Виникла технічна помилка при створенні звіту за місяць {month}: {str(e)}"}
     
     return result
