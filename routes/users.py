@@ -7,8 +7,13 @@ user_router = APIRouter(prefix="/user_credits")
 
 
 @user_router.get("/{user_id}/")
-def user_credits(user_id):
-    """Повертає звіт по кредитах користувача"""
+def user_credits(user_id:int)->dict:
+    """
+    Повертає звіт по кредитам користувача
+
+    Args: 
+            user_id: id користувача, кредити якого хочемо отримати
+    """
     credits = get_credits(user_id = user_id)
     if not credits:
         raise HTTPException(status_code=404, detail= "Кредитів для цього юзера не знайдено")

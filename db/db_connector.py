@@ -22,7 +22,11 @@ TEST_DB_CONFIG = {
 }
 
 def get_db_url(test):
-    """Получить строку подключения к БД"""
+    """
+    Отримує посилання для підключення
+    Args:
+            test: тип бази даних (test або default)
+    """
 
     config = TEST_DB_CONFIG if test else DB_CONFIG
 

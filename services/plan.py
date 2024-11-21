@@ -4,6 +4,11 @@ from models.plan import PlansModel
 from db.db_connector import session
 
 def get_plans_by_year(year:int):
+    """
+    Повертає плани за вказаний рік
+    Args:
+            year: рік, за який збираємо плани
+    """
     return (
         session.query(PlansModel)
         .filter(
@@ -12,7 +17,12 @@ def get_plans_by_year(year:int):
     ).all()
 
 
-def check_plan(plan):
+def check_plan(plan:dict):
+    """Перевіряє наявність файлу 
+    з тим самим періодом та категорією
+    Args:
+            plan: словник, має містити ("categpry_id", "period")
+    """
     data =session.query(PlansModel)\
     .filter(PlansModel.category_id == plan["category_id"],\
         PlansModel.period == plan["period"]).first()
@@ -34,7 +44,12 @@ def insert_xl_plans(plans):
 
 
 def get_plan_by_month(month,year):
-    """Повертає плани за місяцем та роком"""
+    """
+    Повертає плани за місяцем та роком
+    Args:
+            month: місяць, за який хочемо отримати плани
+            year: рік, за який хочемо отримати плани
+    """
     return (session.query(PlansModel)
             .filter(func.extract("year", PlansModel.period)== year,
                     func.extract("month", PlansModel.period) == month

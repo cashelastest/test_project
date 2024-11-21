@@ -1,13 +1,21 @@
 from datetime import datetime
 import pandas as pd
+import numpy as np
 
-
-def get_from_csv(filename):
+def get_from_csv(filename:str):
+    """
+    Читає csv файл та повертаэ DataFrame
+    Args:
+            filename:ім'я csv файла
+    """
     data = pd.read_csv(filename, sep="\t")
     return data
 
 
 def handle_nan(value):
+    """
+    Перевіряє, чи не дорівнює значення nan
+    """
     if (value == 'nan' or 
         pd.isna(value) or 
         value is None or 
@@ -16,8 +24,12 @@ def handle_nan(value):
     return value
 
 
-def parse_date(date_str):
-    """Парсить дату та перевіяє на валідність"""
+def parse_date(date_str:str):
+    """
+    Парсить дату та перевіяє на валідність
+    Args: 
+            date_str: дату,котру парсимо
+    """
     if not date_str:
         return None
     try:
@@ -27,8 +39,15 @@ def parse_date(date_str):
         return None
     
 
-def filter_by_month(items, month_attr, month):
-    return [item for item in items if getattr(item, month_attr).month == month]
+def filter_by_month(items:object, attr:str, month:int):
+    """
+    Фільтрує за вказаним місяцем
+    Args:
+            items: список з моделей
+            attr: атрибут,який будем додавати
+            month: обраний місяць
+    """
+    return [item for item in items if getattr(item, attr).month == month]
 
 
 def safe_percent_counting(part, whole):

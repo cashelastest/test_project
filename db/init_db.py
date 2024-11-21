@@ -79,6 +79,7 @@ def insert_plans():
 
 
 def init_db():
+    """Створює таблиці на базі моделей"""
     BaseModel.metadata.create_all(bind=engine)
 
     

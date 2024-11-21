@@ -15,8 +15,12 @@ plans_router = APIRouter(
 
 @plans_router.post("_insert/")
 async def create_upload_file(file:UploadFile):
-    """Отримує Excel файл з планів, проводить перевірку, записує та за наявності помилок - повертає їх"""
-    print(file.filename)
+    """
+    Проводить перевірку планів з книги, записує та за наявності помилок - повертає їх
+    Args:
+            file: Excel file з колонками (місяць плану, назва категорії плану, сума)
+    """
+ 
     if not file.filename.endswith((".xls", ".xlsm", ".xlsx")):
         raise HTTPException(status_code=404, detail= "Неправильний формат файлу. Дозволені типи: .xlsx, .xls, .xlsm")
     contents = await file.read()
@@ -31,7 +35,12 @@ async def create_upload_file(file:UploadFile):
 
 @plans_router.post("_perfomance/")
 def plans_perfomance(date:date):
-    """Повертає інфу про виконання планів за період"""
+    """
+    Повертає звіт про виконання планів
+    за період з першого числа до введеної дати
+    Args:
+            date:дата за яку хочемо передивитись плани
+    """
     month,year = date.month,date.year
     month_name = datetime(2024, month,1).strftime("%B")
     plans = get_plan_by_month(month,year)

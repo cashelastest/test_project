@@ -2,16 +2,25 @@ from models.credit import CreditsModel
 from db.db_connector import session
 from services.payment import get_payments_by_credit,get_body_percent_payments
 import datetime
-
-def get_credits_for_period(start,end):
-    """Повертає усі кредити за період"""
+from datetime import date
+def get_credits_for_period(start:date,end:date):
+    """
+    Повертає усі кредити за період
+    Args:
+            start: початкова дата
+            end: кінцева дата
+    """
     return (session.query(CreditsModel)
             .filter(CreditsModel.issuance_date.between(start,end))
             )
 
 
-def get_credit_info(credit):
-    """Дістає інформацію з кредиту та робить з неї звіт"""
+def get_credit_info(credit:object):
+    """
+    Дістає інформацію з кредиту та робить з неї звіт
+    Args:
+            credit: кредит користувача
+    """
     info= {}
     if credit.actual_return_date:
         info['Дата повернення кредиту'] = credit.actual_return_date
@@ -35,6 +44,10 @@ def get_credit_info(credit):
     return info
 
 
-def get_credits(user_id):
-    """Повертає усі кредити по id користувача"""
+def get_credits(user_id:int):
+    """Витягує та повертає усі кредити користувача
+    
+    Args:
+            user_id: id користувача
+    """
     return session.query(CreditsModel).filter(CreditsModel.user_id==user_id).all()
